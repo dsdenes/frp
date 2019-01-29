@@ -397,13 +397,13 @@ func (ctl *Control) manager() {
 				}
 
 				if exists {
-					lockedToProxyName, err := c.Do("GET", "projects:"+m.SubDomain)
+					lockedToProxyName, err := redis.String(c.Do("GET", "projects:"+m.SubDomain))
 					if err != nil {
 						ctl.conn.Warn("Cannot get Redis key for subdomain [%s]: %v", m.SubDomain, err)
 						return
 					}
 					if lockedToProxyName != m.ProxyName {
-						ctl.conn.Warn("Subdomain [%s] doesn't belong to proxy name [%s]", m.SubDomain, m.ProxyName)
+						ctl.conn.Warn("Subdomain [%s] doesn't belong to proxy name [%s], it belongs to [%s]", m.SubDomain, m.ProxyName, lockedToProxyName)
 						return
 					}
 				}
