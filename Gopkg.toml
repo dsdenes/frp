@@ -47,7 +47,7 @@
 
 [[constraint]]
   name = "github.com/hashicorp/yamux"
-  revision = "2658be15c5f05e76244154714161f17e3e77de2e"
+  branch = "master"
 
 [[constraint]]
   name = "github.com/gorilla/mux"
@@ -72,7 +72,6 @@
 [[override]]
   name = "github.com/templexxx/reedsolomon"
   version = "0.1.1"
-
-[prune]
-  go-tests = true
-  unused-packages = true
+[[constraint]]
+  name = "github.com/gomodule/redigo"
+  version = "2.0.0"

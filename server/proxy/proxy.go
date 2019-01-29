@@ -19,13 +19,13 @@ import (
 	"io"
 	"sync"
 
-	"github.com/fatedier/frp/g"
-	"github.com/fatedier/frp/models/config"
-	"github.com/fatedier/frp/models/msg"
-	"github.com/fatedier/frp/server/controller"
-	"github.com/fatedier/frp/server/stats"
-	"github.com/fatedier/frp/utils/log"
-	frpNet "github.com/fatedier/frp/utils/net"
+	"github.com/dsdenes/frp/g"
+	"github.com/dsdenes/frp/models/config"
+	"github.com/dsdenes/frp/models/msg"
+	"github.com/dsdenes/frp/server/controller"
+	"github.com/dsdenes/frp/server/stats"
+	"github.com/dsdenes/frp/utils/log"
+	frpNet "github.com/dsdenes/frp/utils/net"
 
 	frpIo "github.com/fatedier/golib/io"
 )

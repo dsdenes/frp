@@ -26,9 +26,9 @@ import (
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 
-	"github.com/fatedier/frp/client"
-	"github.com/fatedier/frp/g"
-	"github.com/fatedier/frp/models/config"
+	"github.com/dsdenes/frp/client"
+	"github.com/dsdenes/frp/g"
+	"github.com/dsdenes/frp/models/config"
 )
 
 func init() {

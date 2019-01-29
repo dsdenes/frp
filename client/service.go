@@ -22,13 +22,13 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/fatedier/frp/g"
-	"github.com/fatedier/frp/models/config"
-	"github.com/fatedier/frp/models/msg"
-	"github.com/fatedier/frp/utils/log"
-	frpNet "github.com/fatedier/frp/utils/net"
-	"github.com/fatedier/frp/utils/util"
-	"github.com/fatedier/frp/utils/version"
+	"github.com/dsdenes/frp/g"
+	"github.com/dsdenes/frp/models/config"
+	"github.com/dsdenes/frp/models/msg"
+	"github.com/dsdenes/frp/utils/log"
+	frpNet "github.com/dsdenes/frp/utils/net"
+	"github.com/dsdenes/frp/utils/util"
+	"github.com/dsdenes/frp/utils/version"
 
 	fmux "github.com/hashicorp/yamux"
 )

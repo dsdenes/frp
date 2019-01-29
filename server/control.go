@@ -21,16 +21,17 @@ import (
 	"sync"
 	"time"
 
-	"github.com/fatedier/frp/g"
-	"github.com/fatedier/frp/models/config"
-	"github.com/fatedier/frp/models/consts"
-	frpErr "github.com/fatedier/frp/models/errors"
-	"github.com/fatedier/frp/models/msg"
-	"github.com/fatedier/frp/server/controller"
-	"github.com/fatedier/frp/server/proxy"
-	"github.com/fatedier/frp/server/stats"
-	"github.com/fatedier/frp/utils/net"
-	"github.com/fatedier/frp/utils/version"
+	"github.com/dsdenes/frp/g"
+	"github.com/dsdenes/frp/models/config"
+	"github.com/dsdenes/frp/models/consts"
+	frpErr "github.com/dsdenes/frp/models/errors"
+	"github.com/dsdenes/frp/models/msg"
+	"github.com/dsdenes/frp/server/controller"
+	"github.com/dsdenes/frp/server/proxy"
+	"github.com/dsdenes/frp/server/stats"
+	"github.com/dsdenes/frp/utils/net"
+	"github.com/dsdenes/frp/utils/version"
+	"github.com/gomodule/redigo/redis"
 
 	"github.com/fatedier/golib/control/shutdown"
 	"github.com/fatedier/golib/crypto"
@@ -381,6 +382,39 @@ func (ctl *Control) manager() {
 
 			switch m := rawMsg.(type) {
 			case *msg.NewProxy:
+
+				// WPTunnel
+				c, err := redis.DialURL("redis://redis")
+				if err != nil {
+					ctl.conn.Warn("Cannot connect to Redis: %v", err)
+					return
+				}
+				defer c.Close()
+				exists, err := redis.Bool(c.Do("EXISTS", "projects:"+m.SubDomain))
+				if err != nil {
+					ctl.conn.Warn("Cannot get Redis key for subdomain [%s]: %v", m.SubDomain, err)
+					return
+				}
+
+				if exists {
+					lockedToProxyName, err := c.Do("GET", "projects:"+m.SubDomain)
+					if err != nil {
+						ctl.conn.Warn("Cannot get Redis key for subdomain [%s]: %v", m.SubDomain, err)
+						return
+					}
+					if lockedToProxyName != m.ProxyName {
+						ctl.conn.Warn("Subdomain [%s] doesn't belong to proxy name [%s]", m.SubDomain, m.ProxyName)
+						return
+					}
+				}
+
+				_, err = c.Do("SETEX", "projects:"+m.SubDomain, 3600*12, m.ProxyName)
+				if err != nil {
+					ctl.conn.Warn("Cannot get Redis key for domain [%s]: %v", m.SubDomain, err)
+					return
+				}
+				// WPTunnel
+
 				// register proxy in this control
 				remoteAddr, err := ctl.RegisterProxy(m)
 				resp := &msg.NewProxyResp{
